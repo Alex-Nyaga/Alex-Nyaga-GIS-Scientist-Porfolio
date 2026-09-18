@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark theme (default) — deep near-black navy base with an emerald/mint
+     accent. Stored as "R G B" channel triples (not hex) so Tailwind's
+     color-opacity modifiers, e.g. bg-accent/10, work correctly. */
+  --color-bg: 4 7 12;
+  --color-bg-surface: 7 13 20;
+  --color-bg-card: 10 18 26;
+  --color-bg-elevated: 14 23 32;
+
+  --color-accent: 34 199 127;
+  --color-accent-light: 94 234 168;
+  --color-accent-dark: 21 153 96;
+
+  --color-border: 23 34 43;
+  --color-border-light: 35 47 57;
+
+  --color-ink: 238 242 244;
+  --color-ink-muted: 139 152 163;
+  --color-ink-faint: 87 99 109;
+}
+
+html.light {
+  /* Light theme — soft off-white base, same emerald accent family. */
+  --color-bg: 246 248 248;
+  --color-bg-surface: 238 242 243;
+  --color-bg-card: 255 255 255;
+  --color-bg-elevated: 232 237 238;
+
+  --color-accent: 21 153 96;
+  --color-accent-light: 34 199 127;
+  --color-accent-dark: 14 122 76;
+
+  --color-border: 221 228 230;
+  --color-border-light: 203 212 215;
+
+  --color-ink: 11 18 22;
+  --color-ink-muted: 76 90 97;
+  --color-ink-faint: 124 137 144;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-ink antialiased;
+    overflow: hidden;
+    font-feature-settings: "ss01" 1;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme("colors.accent.DEFAULT");
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  /* Slim scrollbar in the site's own palette */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme("colors.background.DEFAULT");
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme("colors.border.light");
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme("colors.accent.dark");
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Reusable faint topographic-line backdrop. The source SVG ships as
+     grey lines on a white rect, so we invert it to sit on the dark
+     theme — white becomes black (blends into the page) and the grey
+     linework becomes a soft light line. Opacity is set per usage. */
+  .contour-layer {
+    filter: invert(1) brightness(1.8);
+    mix-blend-mode: screen;
+  }
+
+  /* In light mode the source (grey lines on white) already reads correctly
+     against a light page, so skip the dark-mode invert/screen treatment. */
+  html.light .contour-layer {
+    filter: none;
+    mix-blend-mode: multiply;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
